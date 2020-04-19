@@ -80,20 +80,17 @@ OP_div "/"
 OP_mul "*"
 
 
-/* Other operators appear here */ 
-
-
 newline  "\n"
-
+ /* Separators */
 DL_lparen "("
 DL_rparen ")"
+DL_lbraket "["
+DL_rbraket "]"
 DL_lbrace "{"
 DL_rbrace "}"
 DL_comma  ","
 DL_semicol ";"
 DL_dot  "."
-
-/* Other separators appear here */
 
 error    .
 
