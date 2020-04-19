@@ -60,9 +60,25 @@ string_constant L?\"{s_char_sequence}\"
  /* comment */
 comment \/\*([^*]*\*)([^/][^*]*\*)*\/
 
- /* others */
+ /* assignment operation */
 OP_assign        "="
+ /* boolean operations */
 OP_or   "||"
+OP_and "&&"
+OP_not "!"
+ /* relational operations */
+OP_gt ">"
+OP_lt "<"
+OP_ge ">="
+OP_le "<="
+OP_neq "!="
+OP_eq "=="
+ /* arithmetic operations */
+OP_plus "+"
+OP_minus "-"
+OP_div "/"
+OP_mul "*"
+
 
 /* Other operators appear here */ 
 
