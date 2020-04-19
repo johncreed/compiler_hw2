@@ -24,7 +24,7 @@ ID	 {letter}({letter}|{digit}|"_")*
 WS	 [ \t]+
 Int_constant {digit}+
 
-/* Float constant */
+ /* Float constant */
 sign_part [+-]
 digit_seq {digit}+
 test_float ({digit_seq}\.{digit_seq}|{digit_seq}\.)
@@ -39,6 +39,9 @@ binary_exponent [pP]{sign_part}?{digit_seq}
 dot_hex_digits ({hex_digit_sequence}\.)|({hex_digit_sequence}\.{hex_digit_sequence})|\.{hex_digit_sequence}
 hexadecimal_floating_constant ({hex_prefix}{dot_hex_digits}{binary_exponent}{floating_suffix}?)|({hex_prefix}{hex_digit_sequence}{binary_exponent}{floating_suffix}?)
 Float_constant {decimal_floating_constant}|{hexadecimal_floating_constant}
+
+ /* comment */
+comment \/\*([^*]*\*)([^/][^*]*\*)*\/
 
 
 /* You need to define the following RE's 
