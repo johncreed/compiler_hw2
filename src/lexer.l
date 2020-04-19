@@ -27,23 +27,21 @@ Int_constant {digit}+
 /* Float constant */
 sign_part [+-]
 digit_seq {digit}+
-dot_digit ({digit_seq}\.) | ({digit_seq}\.{digit_seq}) | (\.{digit_seq})
-exponent [eE]{sign_part}{digit_seq}
+test_float ({digit_seq}\.{digit_seq}|{digit_seq}\.)
+dot_digit ({digit_seq}\.)|({digit_seq}\.{digit_seq})|(\.{digit_seq})
+exponent [eE]{sign_part}?{digit_seq}
 float_suffix [fFlL]
-decimal_floating_constant ({digit_seq}{exponent}{float_suffix}) | ({dot_digit}{exponent}{float_suffix})
-
+decimal_floating_constant ({digit_seq}{exponent}{float_suffix}?)|({dot_digit}{exponent}?{float_suffix}?)
 hex_digit [0-9a-fA-F]
 hex_prefix 0[xX]
 hex_digit_sequence {hex_digit}+
-binary_exponent [pP]{sign_part}{digit_seq}
-dot_hex_digits ({hex_digit_sequence}\.) | ({hex_digit_sequence}\.{hex_digit_sequence}) | \.{hex_digit_sequence}
-hexadecimal_floating_constant ({hex_prefix}{dot_hex_digits}{binary_exponent}{floating_suffix}) | ({hex_prefix}{hex_digit_sequence}{digit_exponent}{floating_suffix})
-
-Float_constant {decimal_floating_constant} | {hexadecimal_floating_constant}
+binary_exponent [pP]{sign_part}?{digit_seq}
+dot_hex_digits ({hex_digit_sequence}\.)|({hex_digit_sequence}\.{hex_digit_sequence})|\.{hex_digit_sequence}
+hexadecimal_floating_constant ({hex_prefix}{dot_hex_digits}{binary_exponent}{floating_suffix}?)|({hex_prefix}{hex_digit_sequence}{binary_exponent}{floating_suffix}?)
+Float_constant {decimal_floating_constant}|{hexadecimal_floating_constant}
 
 
 /* You need to define the following RE's 
-Float_constant
 String_constant
 comment
 */
