@@ -1,0 +1,8 @@
+"123321"
+L"123321"
+L"\n\t\b\r\f\v\\\'\"\a\?"
+"\012\345\670"
+"\x0123456789abcdefABCDEF"
+"\u0123\u5678\u9abc\udef0\uABCD\uEFEF"
+"\U01235678\U9abcdef0\UABCDEFEF"
+
