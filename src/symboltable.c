@@ -10,6 +10,11 @@
 symtab * hash_table[TABLE_SIZE];
 extern int linenumber;
 
+void init_table(){
+    for(int i = 0; i < 256; i++)
+        hash_table[i] = NULL;
+}
+
 int HASH(char * str){
 	int idx=0;
 	while(*str){
@@ -85,5 +90,34 @@ void printSymTab()
 	    printSym(symptr);
 	    symptr=symptr->front;
 	}
+    }
+}
+
+int sym_counter_compare(const void *a, const void *b){
+    symtab **ptra = (symtab **) a;
+    symtab **ptrb = (symtab **) b;
+
+    return ((*ptra)->counter < (*ptrb)->counter); 
+}
+ 
+void printFreq(){
+
+    printf("Frequency of identifiers:\n");
+    int cnt = 0;
+    symtab *freq_array[TABLE_SIZE];
+    
+    for(int i = 0; i < TABLE_SIZE; i++){
+        symtab *symptr = hash_table[i];
+        if(symptr != NULL){
+            freq_array[cnt] = symptr;
+            cnt++;
+        }
+    }
+    
+    qsort(freq_array, cnt, sizeof(symtab *), sym_counter_compare);
+
+    for(int i = 0; i < cnt; i++){
+        symtab *ptr = freq_array[i];
+        printf("%s\t%d\n", ptr->lexeme, ptr->counter);
     }
 }

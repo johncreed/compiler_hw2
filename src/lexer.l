@@ -23,7 +23,7 @@ digit    [0-9]
 hex_digit [0-9a-fA-F]
 ID	 {letter}({letter}|{digit}|"_")*
 WS	 [ \t]+
-Int_constant {digit}+
+int_constant {digit}+
 
  /* decimal float */
 sign_part [+-]
@@ -31,8 +31,8 @@ digit_seq {digit}+
 test_float ({digit_seq}\.{digit_seq}|{digit_seq}\.)
 dot_digit ({digit_seq}\.)|({digit_seq}\.{digit_seq})|(\.{digit_seq})
 exponent [eE]{sign_part}?{digit_seq}
-float_suffix [fFlL]
-decimal_floating_constant ({digit_seq}{exponent}{float_suffix}?)|({dot_digit}{exponent}?{float_suffix}?)
+floating_suffix [fFlL]
+decimal_floating_constant ({digit_seq}{exponent}{floating_suffix}?)|({dot_digit}{exponent}?{floating_suffix}?)
  /* hexadecimal float */
 hex_prefix 0[xX]
 hex_digit_sequence {hex_digit}+
@@ -40,7 +40,7 @@ binary_exponent [pP]{sign_part}?{digit_seq}
 dot_hex_digits ({hex_digit_sequence}\.)|({hex_digit_sequence}\.{hex_digit_sequence})|\.{hex_digit_sequence}
 hexadecimal_floating_constant ({hex_prefix}{dot_hex_digits}{binary_exponent}{floating_suffix}?)|({hex_prefix}{hex_digit_sequence}{binary_exponent}{floating_suffix}?)
  /* float literal */
-Float_constant {decimal_floating_constant}|{hexadecimal_floating_constant}
+float_constant {decimal_floating_constant}|{hexadecimal_floating_constant}
 
  /* escape character */
 hex_quad {hex_digit}{4}
@@ -79,7 +79,6 @@ OP_minus "-"
 OP_div "/"
 OP_mul "*"
 
-
 newline  "\n"
  /* Separators */
 DL_lparen "("
@@ -96,39 +95,79 @@ error    .
 
 %%
 
-{WS}            {}
-{RWInt}         {/* return INT; */ }
-{RWFloat}       {/* return FLOAT; */}
-{ID}            { 
-			ptr = lookup(yytext);
-			if (ptr == NULL)
-			     insertID(yytext);	
-			else 
-			     ptr->counter++;
-		}
+ /* reserved words */
+return   {/*ECHO;*/}
+typedef   {/*ECHO;*/}
+if   {/*ECHO;*/}
+else   {/*ECHO;*/}
+int   {/*ECHO;*/}
+float   {/*ECHO;*/}
+for   {/*ECHO;*/}
+void   {/*ECHO;*/}
+while   {/*ECHO;*/}
 
-{OP_assign}     /* return OP_ASSIGN; */ 
-{OP_or}         /* return OP_OR; */
-{DL_lparen}     /* return MK_LPAREN; */
-{DL_rparen}     /* return MK_RPAREN; */
-{DL_lbrace}     /* return MK_LBRACE; */
-{DL_rbrace}     /* return MK_RBRACE; */
-{DL_comma}      {}
-{DL_semicol}    {}
-{newline}       linenumber += 1;
-{error}         printf("ERR \n");/* return ERROR; */
+    /* identifiers */
+{WS}            { /*ECHO;*/}
+{ID}            { /*ECHO;*/
+            ptr = lookup(yytext);
+            if (ptr == NULL)
+                 insertID(yytext);  
+            else 
+                 ptr->counter++;
+        }
+
+    /* constants */
+{int_constant}         { /*ECHO;*/ /* return INT; */ }
+{float_constant}       { /*ECHO;*/ /* return FLOAT; */}
+{string_constant}       { /*ECHO;*/ /* return string;*/}
+{comment}       { printf("%s\n", yytext); /*ECHO;*/ }
+
+
+ /* assignment operation */
+{OP_assign}        { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+ /* boolean operations */
+{OP_or}   { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+{OP_and} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+{OP_not} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+ /* relational operations */
+{OP_gt} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+{OP_lt} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+{OP_ge} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+{OP_le} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+{OP_neq} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+{OP_eq} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+ /* arithmetic operations */
+{OP_plus} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+{OP_minus} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+{OP_div} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+{OP_mul} { /*ECHO;*/ /*return OP_ASSIGN;*/ } 
+
+{DL_lparen}    {/*ECHO;*/} /* return MK_LPAREN; */
+{DL_rparen}     {/*ECHO;*/} /* return MK_RPAREN; */
+{DL_lbraket}     {/*ECHO;*/} /* return MK_LBRAKET; */
+{DL_rbraket}     {/*ECHO;*/}  /* return MK_RBRAKET; */
+{DL_lbrace}     {/*ECHO;*/}  /* return MK_LBRACE; */
+{DL_rbrace}     {/*ECHO;*/}  /* return MK_RBRACE; */
+{DL_comma}      {/*ECHO;*/}
+{DL_semicol}    {/*ECHO;*/}
+{DL_dot}          {/*ECHO;*/}
+{newline}       {/*ECHO;*/linenumber += 1;}
+{error}        {/*ECHO;*/ printf("ERR \n"); /* return ERROR; */}
 
 
 %%
 
 main(int argc, char **argv)
 {
- argc--; ++argv;
-   if (argc > 0)
-      yyin = fopen(argv[0], "r");
-   else
-      yyin = stdin;
-   yylex();
-   printSymTab();
+    argc--; ++argv;
+    if (argc > 0)
+        yyin = fopen(argv[0], "r");
+    else
+        yyin = stdin;
+
+    init_table();
+    yylex();
+    //printSymTab();
+    printFreq();
 }
 
