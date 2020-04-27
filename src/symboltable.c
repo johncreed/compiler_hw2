@@ -97,7 +97,7 @@ int sym_counter_compare(const void *a, const void *b){
     symtab **ptra = (symtab **) a;
     symtab **ptrb = (symtab **) b;
 
-    return ((*ptra)->counter < (*ptrb)->counter); 
+    return strcmp((*ptra)->lexeme, (*ptrb)->lexeme); 
 }
  
 void printFreq(){
